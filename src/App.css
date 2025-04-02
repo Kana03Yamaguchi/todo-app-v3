@@ -48,8 +48,8 @@
   padding: 20px;
   border: 2px solid #ddd;
   border-radius: 8px;
-  background-color: #f9f9f9;
   font-family: sans-serif;
+  background-color: #ccc;
 }
 
 /* タイトル */
@@ -74,6 +74,7 @@ h1 {
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f2ebeb;
+  color: #444;
 }
 
 /* 追加ボタン */
