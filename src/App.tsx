@@ -16,13 +16,17 @@ function App() {
   // 入力欄の文字を管理する状態
   const [input, setInput] = useState("");
 
-  // 入力欄に文字が入力されたときの処理
+  /**
+   * 入力欄に文字が入力されたときの処理
+   */
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 入力された文字を保持
     setInput(e.target.value);
   };
 
-  // タスク追加ボタン処理
+  /**
+   * タスク追加ボタン処理
+   */
   const addTodo = () => {
     // 入力欄が空白の場合はTODO追加しない
     if (input.trim() === "") return;
@@ -40,13 +44,31 @@ function App() {
     setInput("");
   };
 
-  // タスク一覧表示処理
+  /**
+   * チェックボックス処理
+   */
+  const changeCheckBox = (id: number) => {
+    const updated = todos.map((todo) =>
+      // IDが一致した場合はcompleted を true/false に切り替え、一致しない場合はそのまま
+      todo.id === id ? { ...todo, completed: !todo.completed } : todo
+    );
+    setTodos(updated);
+  };
+
+  /**
+   * タスク一覧表示処理
+   */
   const todoList = () => {
     return todos.map((todo) => {
       return (
-        <li key={todo.id}>
-          {/* 入力内容(完了状態)を表示 */}
-          {todo.text}({todo.completed ? "完了" : "未完了"})
+        <li key={todo.id} className="todo-item">
+          <input
+            type="checkbox"
+            checked={todo.completed}
+            // チェックされたタスクのIDを渡して関数を呼び出す
+            onChange={changeCheckBox.bind(null, todo.id)}
+          />
+          <span className={todo.completed ? "completed" : ""}>{todo.text}</span>
         </li>
       );
     });

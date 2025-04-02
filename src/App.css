@@ -100,3 +100,10 @@ li {
   font-size: 16px;
   color: #444;
 }
+
+.completed {
+  color: #aaa;
+  font-style: italic;
+  opacity: 0.7;
+  transition: all 0.3s ease;
+}
