@@ -1,73 +1,30 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
-
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
-}
-
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
-  }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-/* アプリ全体の余白と中央寄せ */
+/* アプリ全体のレイアウト設定（中央寄せ・余白など） */
 .container {
   max-width: 500px;
   margin: 40px auto;
   padding: 20px;
   border: 2px solid #ddd;
   border-radius: 8px;
-  font-family: sans-serif;
   background-color: #ccc;
+  font-family: sans-serif;
 }
 
-/* タイトル */
+/* タイトル部分 */
 h1 {
   text-align: center;
   color: #bc8bab;
   margin-bottom: 24px;
 }
 
-/* タスク追加エリア（入力欄 + ボタン） */
-.add-todo {
+/* タスク追加エリア（入力欄とボタンの横並び） */
+.todo-form {
   display: flex;
   gap: 8px;
   margin-bottom: 20px;
 }
 
-/* 入力欄 */
-.add-todo input {
+/* ✏️ 入力欄のスタイル */
+.todo-form input {
   flex: 1;
   padding: 8px;
   font-size: 16px;
@@ -77,8 +34,8 @@ h1 {
   color: #444;
 }
 
-/* 追加ボタン */
-.add-todo button {
+/* 追加ボタンのスタイル */
+.todo-form button {
   padding: 8px 12px;
   font-size: 16px;
   background-color: #65b7d8;
@@ -86,24 +43,51 @@ h1 {
   border: none;
   border-radius: 4px;
   cursor: pointer;
+  transition: background-color 0.3s ease;
 }
 
-/* タスク一覧 */
+.todo-form button:hover {
+  background-color: #4fa4ca;
+}
+
+/* タスク一覧全体（ul） */
 ul {
   list-style: none;
   padding: 0;
 }
 
-li {
+/* タスク1つ分の見た目（li） */
+.todo-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   padding: 8px 12px;
   border-bottom: 1px solid #ddd;
   font-size: 16px;
   color: #444;
 }
 
+/* 完了済みのタスクの見た目 */
 .completed {
   color: #aaa;
   font-style: italic;
   opacity: 0.7;
   transition: all 0.3s ease;
+}
+
+/* 削除ボタンのスタイル */
+.todo-item button {
+  margin-left: 12px;
+  padding: 6px 10px;
+  font-size: 14px;
+  background-color: #d88484;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.todo-item button:hover {
+  background-color: #b06e6e;
 }
