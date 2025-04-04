@@ -3,12 +3,19 @@ import "./App.css";
 import TodoForm from "./components/TodoForm";
 import TodoList from "./components/TodoList";
 import { TodoType } from "./Types/TodoType";
+import { FaChevronUp, FaChevronDown } from "react-icons/fa";
 
 function App() {
-  // タスクの一覧を状態として管理
+  // タスクの一覧を管理
   const [todos, setTodos] = useState<TodoType[]>([]);
-  // 入力欄の文字を管理する状態
+  // 入力欄の文字を管理
   const [input, setInput] = useState("");
+  // エラーメッセージ表示を管理
+  const [errorMsg, setErrorMsg] = useState("");
+  // 削除済みタスクを管理
+  const [deletedTodos, setDeletedTodos] = useState<TodoType[]>([]);
+  // アコーディオン開閉を管理
+  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   // 未完了のタスク数
   const remaining = todos.filter((todo) => !todo.completed).length;
 
@@ -25,7 +32,10 @@ function App() {
    */
   const addTodo = () => {
     // 入力欄が空白の場合はTODO追加しない
-    if (input.trim() === "") return;
+    if (input.trim() === "") {
+      setErrorMsg("タスクを入力してください");
+      return;
+    }
 
     // 新規タスク追加用のオブジェクト作成
     const newTodo: TodoType = {
@@ -38,6 +48,8 @@ function App() {
     setTodos([...todos, newTodo]);
     // 入力欄を空にリセット
     setInput("");
+    // エラーメッセージを空にリセット
+    setErrorMsg("");
   };
 
   /**
@@ -55,9 +67,24 @@ function App() {
    * タスク削除ボタン処理
    */
   const deleteTodo = (id: number) => {
+    // 削除対象のタスクを取得
+    const targetTodo = todos.find((todo) => todo.id === id);
+    if (!targetTodo) return;
+    // 削除済みタスクとして追加
+    setDeletedTodos([...deletedTodos, targetTodo]);
+
     // IDが一致した場合は除外し、一致しないIDだけを残す
     const updated = todos.filter((todo) => todo.id !== id);
     setTodos(updated);
+  };
+
+  // 削除済みタスクの一覧表示処理
+  const deletedTodosList = () => {
+    if (deletedTodos.length === 0) {
+      return <li>削除されたタスクはありません</li>;
+    }
+
+    return deletedTodos.map((todo) => <li key={todo.id}>{todo.text}</li>);
   };
 
   /**
@@ -86,12 +113,19 @@ function App() {
 
   return (
     <div className="container">
-      <h1>TODOアプリ</h1>
-      <p>現在のタスク数：{todos.length} 件</p>
-      <p>残りのタスク数：{remaining} 件</p>
-
+      <h1>TODO</h1>
       {/* タスク追加エリア */}
-      <TodoForm input={input} onChange={inputChange} onAdd={addTodo} />
+      <TodoForm
+        input={input}
+        onChange={inputChange}
+        onAdd={addTodo}
+        errorMsg={errorMsg}
+      />
+
+      {/* タスク件数エリア */}
+      <div className="task-info">
+        <span>アクティブタスク： {remaining} 件</span>
+      </div>
 
       {/* タスク一覧エリア */}
       <TodoList
@@ -99,6 +133,20 @@ function App() {
         changeCompleted={changeCompleted}
         deleteTodo={deleteTodo}
       />
+
+      {/* 削除済みタスクエリア */}
+      <div className="accordion-section">
+        <button
+          className="accordion-toggle"
+          onClick={setIsAccordionOpen.bind(null, !isAccordionOpen)}
+        >
+          {isAccordionOpen ? <FaChevronUp /> : <FaChevronDown />} 削除済
+        </button>
+
+        {isAccordionOpen && (
+          <ul className="deleted-todo-list">{deletedTodosList()}</ul>
+        )}
+      </div>
     </div>
   );
 }

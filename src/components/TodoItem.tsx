@@ -1,3 +1,4 @@
+import { FaCheckCircle, FaRegCircle, FaTrash } from "react-icons/fa";
 import { TodoType } from "../Types/TodoType";
 
 /**
@@ -15,19 +16,32 @@ interface TodoItemProps {
 function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   return (
     <li className="todo-item">
-      {/* チェックボックス表示 */}
-      <input
-        type="checkbox"
-        checked={todo.completed}
-        // チェックされたタスクのIDを渡して関数を呼び出す
-        onChange={changeCompleted.bind(null, todo.id)}
-      />
+      <div className="left-section">
+        {/* チェックボックス表示 */}
+        <span
+          className="check-icon"
+          // チェックされたタスクのIDを渡して関数を呼び出す
+          onClick={changeCompleted.bind(null, todo.id)}
+          style={{ cursor: "pointer" }}
+        >
+          {todo.completed ? (
+            <FaCheckCircle color="#65b7d8" />
+          ) : (
+            <FaRegCircle color="#888" />
+          )}
+        </span>
 
-      {/* タスク内容表示 */}
-      <span className={todo.completed ? "completed" : ""}>{todo.text}</span>
+        {/* タスク内容表示 */}
+        <span className={todo.completed ? "completed" : ""}>{todo.text}</span>
+      </div>
 
       {/* 削除ボタン表示 */}
-      <button onClick={deleteTodo.bind(null, todo.id)}>削除</button>
+      <button
+        className="delete-button"
+        onClick={deleteTodo.bind(null, todo.id)}
+      >
+        <FaTrash />
+      </button>
     </li>
   );
 }
