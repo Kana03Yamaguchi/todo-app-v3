@@ -9,6 +9,16 @@
   font-family: sans-serif;
 }
 
+/* 親要素に flex 指定 */
+body {
+  height: 100vh; /* 高さを画面いっぱいに */
+  display: flex;
+  justify-content: center; /* 水平方向センター */
+  align-items: center; /* 垂直方向センター */
+  background-color: #222; /* 背景色も任意で調整 */
+  margin: 0; /* 忘れがちなデフォルト margin をリセット */
+}
+
 /* タイトル部分 */
 h1 {
   text-align: center;
