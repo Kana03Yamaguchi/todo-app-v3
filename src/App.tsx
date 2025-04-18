@@ -10,49 +10,12 @@ import { TodoContext } from './Contexts/TodoContext';
 function App() {
   // タスクの一覧を管理
   const [todos, dispatch] = useReducer(todoReducer, []);
-  // 入力欄の文字を管理
-  const [input, setInput] = useState('');
-  // エラーメッセージ表示を管理
-  const [errorMsg, setErrorMsg] = useState('');
   // 削除済みタスクを管理
   const [deletedTodos, setDeletedTodos] = useState<TodoType[]>([]);
   // アコーディオン開閉を管理
   const [isAccordionOpen, setIsAccordionOpen] = useState(false);
   // 未完了のタスク数
   const remaining = todos.filter((todo) => !todo.completed).length;
-
-  /**
-   * 入力内容変更処理
-   */
-  const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    // 入力された文字を保持
-    setInput(e.target.value);
-  };
-
-  /**
-   * タスク追加ボタン処理
-   */
-  const addTodo = () => {
-    // 入力欄が空白の場合はTODO追加しない
-    if (input.trim() === '') {
-      setErrorMsg('タスクを入力してください');
-      return;
-    }
-
-    // 新規タスク追加用のオブジェクト作成
-    const newTodo: TodoType = {
-      id: Date.now(), // タスクID（現在時刻）
-      text: input, // タスク内容（入力された内容）
-      completed: false, // 完了状態（未完了）
-    };
-    // タスクを追加する
-    dispatch({ type: 'ADD', payload: newTodo });
-
-    // 入力欄を空にリセット
-    setInput('');
-    // エラーメッセージを空にリセット
-    setErrorMsg('');
-  };
 
   /**
    * タスク削除ボタン処理
@@ -105,12 +68,7 @@ function App() {
       <div className="container">
         <h1>TODO</h1>
         {/* タスク追加エリア */}
-        <TodoForm
-          input={input}
-          onChange={inputChange}
-          onAdd={addTodo}
-          errorMsg={errorMsg}
-        />
+        <TodoForm />
 
         {/* タスク件数エリア */}
         <div className="task-info">

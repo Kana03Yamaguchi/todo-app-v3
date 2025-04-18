@@ -1,6 +1,5 @@
-import { useContext } from 'react';
-import { TodoContext } from '../Contexts/TodoContext';
 import TodoItem from './TodoItem';
+import { useTodos } from '../Hooks/useTodos';
 
 /**
  * props定義
@@ -13,10 +12,8 @@ interface TodoListProps {
  * TodoListコンポーネント：タスク一覧表示
  */
 function TodoList({ deleteTodo }: TodoListProps) {
-  // Contextから取得
-  const context = useContext(TodoContext);
-  if (!context) return null;
-  const { todos, dispatch } = context;
+  // useTodosからContextを取得
+  const { todos, dispatch } = useTodos();
 
   /**
    * 完了状態切り替え処理

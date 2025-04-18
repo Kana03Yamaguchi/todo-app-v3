@@ -14,6 +14,12 @@ export function todoReducer(state: TodoType[], action: Action): TodoType[] {
           : // IDが一致しない場合はそのまま
             todo;
       });
+    case 'EDIT':
+      return state.map((todo) =>
+        todo.id === action.payload.id
+          ? { ...todo, text: action.payload.text }
+          : todo,
+      );
     case 'DELETE':
       return state.filter((todo) => {
         // タスクを削除する（IDが一致しないものだけ残す）

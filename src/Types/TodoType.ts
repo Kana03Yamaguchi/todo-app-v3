@@ -11,4 +11,5 @@ export interface TodoType {
 export type Action =
   | { type: 'ADD'; payload: TodoType } // タスク追加
   | { type: 'CHANGE_COMPLETED'; payload: number } // 完了状態切り替え
+  | { type: 'EDIT'; payload: { id: number; text: string } } // タスク編集
   | { type: 'DELETE'; payload: number }; // タスク削除
