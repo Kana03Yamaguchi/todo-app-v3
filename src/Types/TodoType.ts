@@ -4,6 +4,7 @@
 export interface TodoType {
   id: number; // タスクID
   text: string; // タスク内容
+  dueDate?: string; // タスク期日
   completed: boolean; // 完了状態（true: 完了 / false: 未完了）
 }
 
@@ -11,5 +12,5 @@ export interface TodoType {
 export type Action =
   | { type: 'ADD'; payload: TodoType } // タスク追加
   | { type: 'CHANGE_COMPLETED'; payload: number } // 完了状態切り替え
-  | { type: 'EDIT'; payload: { id: number; text: string } } // タスク編集
+  | { type: 'EDIT'; payload: { id: number; text: string; dueDate?: string } } // タスク編集
   | { type: 'DELETE'; payload: number }; // タスク削除

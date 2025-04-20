@@ -7,8 +7,10 @@ import { useTodos } from '../Hooks/useTodos';
  * TodoFormコンポーネント：入力欄と追加ボタンを表示
  */
 function TodoForm() {
-  // 入力欄の文字を管理
+  // 入力欄の内容を管理
   const [input, setInput] = useState('');
+  // 期日を管理
+  const [dueDate, setDueDate] = useState('');
   // エラーメッセージ表示を管理
   const [errorMsg, setErrorMsg] = useState('');
 
@@ -21,6 +23,13 @@ function TodoForm() {
   const inputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 入力された文字を保持
     setInput(e.target.value);
+  };
+
+  /**
+   * 期日変更処理
+   */
+  const dueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setDueDate(e.target.value);
   };
 
   /**
@@ -37,6 +46,7 @@ function TodoForm() {
     const newTodo: TodoType = {
       id: Date.now(), // タスクID（現在時刻）
       text: input, // タスク内容（入力された内容）
+      dueDate: dueDate || undefined, // タスク期日（任意選択された期日）
       completed: false, // 完了状態（未完了）
     };
     // タスクを追加する
@@ -44,6 +54,8 @@ function TodoForm() {
 
     // 入力欄を空にリセット
     setInput('');
+    // 期日を空にリセット
+    setDueDate('');
     // エラーメッセージを空にリセット
     setErrorMsg('');
   };
@@ -58,6 +70,9 @@ function TodoForm() {
           onChange={inputChange}
           placeholder="タスクを入力"
         />
+
+        {/* 期日欄表示 */}
+        <input type="date" value={dueDate} onChange={dueDateChange} />
 
         {/* 追加ボタン表示 */}
         <button onClick={addTodo}>

@@ -17,7 +17,11 @@ export function todoReducer(state: TodoType[], action: Action): TodoType[] {
     case 'EDIT':
       return state.map((todo) =>
         todo.id === action.payload.id
-          ? { ...todo, text: action.payload.text }
+          ? {
+              ...todo,
+              text: action.payload.text,
+              dueDate: action.payload.dueDate,
+            }
           : todo,
       );
     case 'DELETE':

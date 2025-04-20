@@ -3,9 +3,10 @@ import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import { TodoType } from './Types/TodoType';
-import { FaChevronUp, FaChevronDown } from 'react-icons/fa';
+import { FaChevronUp, FaChevronDown, FaTrash } from 'react-icons/fa';
 import { todoReducer } from './Reducers/todoReducer';
 import { TodoContext } from './Contexts/TodoContext';
+import { MantineProvider } from '@mantine/core';
 
 function App() {
   // タスクの一覧を管理
@@ -64,35 +65,38 @@ function App() {
   }, []);
 
   return (
-    <TodoContext.Provider value={{ todos, dispatch }}>
-      <div className="container">
-        <h1>TODO</h1>
-        {/* タスク追加エリア */}
-        <TodoForm />
+    <MantineProvider>
+      <TodoContext.Provider value={{ todos, dispatch }}>
+        <div className="container">
+          <h1>TODO</h1>
+          {/* タスク追加エリア */}
+          <TodoForm />
 
-        {/* タスク件数エリア */}
-        <div className="task-info">
-          <span>アクティブタスク： {remaining} 件</span>
+          {/* タスク件数エリア */}
+          <div className="task-info">
+            <span>アクティブタスク： {remaining} 件</span>
+          </div>
+
+          {/* タスク一覧エリア */}
+          <TodoList deleteTodo={deleteTodo} />
+
+          {/* 削除済みタスクエリア */}
+          <div className="accordion-section">
+            <button
+              className="accordion-toggle"
+              onClick={setIsAccordionOpen.bind(null, !isAccordionOpen)}
+            >
+              {isAccordionOpen ? <FaChevronUp /> : <FaChevronDown />}{' '}
+              <FaTrash />
+            </button>
+
+            {isAccordionOpen && (
+              <ul className="deleted-todo-list">{deletedTodosList()}</ul>
+            )}
+          </div>
         </div>
-
-        {/* タスク一覧エリア */}
-        <TodoList deleteTodo={deleteTodo} />
-
-        {/* 削除済みタスクエリア */}
-        <div className="accordion-section">
-          <button
-            className="accordion-toggle"
-            onClick={setIsAccordionOpen.bind(null, !isAccordionOpen)}
-          >
-            {isAccordionOpen ? <FaChevronUp /> : <FaChevronDown />} 削除済
-          </button>
-
-          {isAccordionOpen && (
-            <ul className="deleted-todo-list">{deletedTodosList()}</ul>
-          )}
-        </div>
-      </div>
-    </TodoContext.Provider>
+      </TodoContext.Provider>
+    </MantineProvider>
   );
 }
 

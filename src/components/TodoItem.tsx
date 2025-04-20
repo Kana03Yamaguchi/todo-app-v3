@@ -4,10 +4,12 @@ import {
   FaRegCircle,
   FaSave,
   FaTrash,
+  FaUndoAlt,
 } from 'react-icons/fa';
 import { TodoType } from '../Types/TodoType';
 import { useState } from 'react';
 import { useTodos } from '../Hooks/useTodos';
+import { Tooltip } from '@mantine/core';
 
 /**
  * props定義
@@ -24,12 +26,23 @@ interface TodoItemProps {
 function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   // 編集状態を管理（false:編集OFF/true:編集ON）
   const [isEditing, setIsEditing] = useState(false);
-  // 入力欄の文字を管理（編集用）
+  // 入力欄の内容を管理（編集用）
   const [editInput, setEditInput] = useState(todo.text);
+  // 期日の内容を管理（編集用）
+  const [editDueDate, setEditDueDate] = useState(todo.dueDate || '');
   // エラーメッセージ表示を管理
   const [errorMsg, setErrorMsg] = useState('');
   // useTodosからContextを取得
   const { dispatch } = useTodos();
+
+  // 年月日表示フォーマット
+  const formatDate = (dateString: string): string => {
+    const date = new Date(dateString);
+    const yyyy = date.getFullYear();
+    const mm = String(date.getMonth() + 1).padStart(2, '0');
+    const dd = String(date.getDate()).padStart(2, '0');
+    return `${yyyy}/${mm}/${dd}`;
+  };
 
   /**
    * タスク編集ボタン処理
@@ -37,8 +50,24 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   const startEdit = () => {
     // 入力欄に初期値をセット
     setEditInput(todo.text);
+    // 期日に初期値をセット
+    setEditDueDate(todo.dueDate ? todo.dueDate : '');
     // 編集ONに切り替え
     setIsEditing(true);
+  };
+
+  /**
+   * タスク編集キャンセルボタン処理
+   */
+  const cancelEdit = () => {
+    // 編集OFFに切り替え
+    setIsEditing(false);
+    // 入力欄に初期値をセット
+    setEditInput(todo.text);
+    // 期日に初期値をセット
+    setEditDueDate(todo.dueDate ? todo.dueDate : '');
+    // エラーメッセージを空にリセット
+    setErrorMsg('');
   };
 
   /**
@@ -47,6 +76,14 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   const editInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // 入力された文字を保持
     setEditInput(e.target.value);
+  };
+
+  /**
+   * 期日内容変更処理（編集用）
+   */
+  const editDueDateChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    // 選択した年月日を保持
+    setEditDueDate(e.target.value);
   };
 
   /**
@@ -60,7 +97,10 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
     }
 
     // タスクを保存する
-    dispatch({ type: 'EDIT', payload: { id: todo.id, text: editInput } });
+    dispatch({
+      type: 'EDIT',
+      payload: { id: todo.id, text: editInput, dueDate: editDueDate },
+    });
 
     // 編集OFFに切り替え
     setIsEditing(false);
@@ -87,9 +127,17 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
         </span>
 
         {isEditing ? (
+          // 編集ONの場合
           <div className="todo-edit-form">
-            {/* 入力欄表示（編集用） */}
+            {/* 入力欄表示 */}
             <input type="text" value={editInput} onChange={editInputChange} />
+
+            {/* 期日欄表示 */}
+            <input
+              type="date"
+              value={editDueDate}
+              onChange={editDueDateChange}
+            />
 
             {/* 保存ボタン表示 */}
             <button onClick={saveTodo}>
@@ -100,20 +148,37 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
             {errorMsg && <p className="error-message">{errorMsg}</p>}
           </div>
         ) : (
+          // 編集OFFの場合
           <>
             {/* タスク内容表示 */}
             <span className={todo.completed ? 'completed' : ''}>
               {todo.text}
             </span>
+
+            {/* タスク期日 */}
+            {todo.dueDate && (
+              <span className="due-date"> {formatDate(todo.dueDate)}</span>
+            )}
           </>
         )}
       </div>
 
       <div className="right-section">
-        {/* 編集ボタン表示 */}
-        <button className="edit-button" onClick={startEdit}>
-          <FaEdit />
-        </button>
+        {isEditing ? (
+          <>
+            {/* キャンセルボタン表示 */}
+            <button className="edit-cance-button" onClick={cancelEdit}>
+              <FaUndoAlt />
+            </button>
+          </>
+        ) : (
+          <>
+            {/* 編集ボタン表示 */}
+            <button className="edit-start-button" onClick={startEdit}>
+              <FaEdit />
+            </button>
+          </>
+        )}
 
         {/* 削除ボタン表示 */}
         <button

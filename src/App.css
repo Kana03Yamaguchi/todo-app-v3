@@ -59,7 +59,7 @@ h1 {
   margin-bottom: 24px;
 }
 
-/* 入力欄と追加ボタンを表示全体 */
+/* 入力欄/期日欄/追加ボタンの表示全体 */
 .todo-form {
   display: flex;
   gap: 16px;
@@ -67,10 +67,26 @@ h1 {
 }
 
 /* 入力欄 */
-.todo-form input {
-  flex: 1;
+.todo-form input,
+.todo-edit-form input {
+  flex: 2;
   padding: 12px;
   font-size: 18px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: #f2ebeb;
+  color: #444;
+  box-sizing: border-box;
+}
+
+/* 期日欄 */
+.todo-form input[type='date'],
+.todo-edit-form input[type='date'] {
+  flex: 1;
+  min-width: 130px;
+  max-width: 160px;
+  padding: 12px;
+  font-size: 16px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: #f2ebeb;
@@ -119,7 +135,7 @@ ul {
   color: #444;
 }
 
-/* タスク項目左側（チェックアイコン/テキスト/ 入力欄（編集用）/保存ボタン） */
+/* タスク項目左側（チェックアイコン/テキスト/ 入力欄（編集用）/期日欄（編集用）/保存ボタン） */
 .left-section {
   display: flex;
   align-items: center;
@@ -138,23 +154,31 @@ ul {
   transform: scale(0.9);
 }
 
-/* 完了済みのタスク */
-.completed {
+/* 完了済みタスク内容 */
+.completed + .due-date {
   color: #aaa;
   font-style: italic;
   opacity: 0.7;
   transition: all 0.3s ease;
 }
 
-/* 入力欄（編集用） */
-.todo-edit-form input {
-  flex: 1;
-  padding: 12px;
-  font-size: 18px;
-  border: 1px solid #ccc;
+/* 期日表示 */
+.due-date {
+  margin-left: 12px;
+  font-size: 14px;
+  color: #e62d2d;
+  font-style: italic;
+  background-color: rgba(255, 255, 255, 0.3);
+  padding: 2px 6px;
   border-radius: 4px;
-  background-color: #f2ebeb;
-  color: #444;
+}
+
+/* 入力欄/期日欄/保存ボタンの表示全体 */
+.todo-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 12px; /* ← ここで左右の感覚を調整！ */
+  flex-wrap: wrap; /* ← モバイル対応で折り返しもOKに */
 }
 
 /* 保存ボタン */
@@ -180,7 +204,7 @@ ul {
 }
 
 /* 編集ボタン */
-.edit-button {
+.edit-start-button {
   padding: 8px 12px;
   font-size: 16px;
   background: none;
@@ -190,8 +214,23 @@ ul {
   transition: color 0.3s ease;
 }
 
-.edit-button:hover {
+.edit-start-button:hover {
   color: #04d24f;
+}
+
+/* キャンセルボタン */
+.edit-cance-button {
+  padding: 8px 12px;
+  font-size: 16px;
+  background: none;
+  border: none;
+  color: #333;
+  cursor: pointer;
+  transition: color 0.3s ease;
+}
+
+.edit-cance-button:hover {
+  color: #ff9324;
 }
 
 /* 削除ボタン */
@@ -250,6 +289,9 @@ ul {
 /* フォーカス時の枠線削除 */
 .todo-form input:focus,
 .todo-form button:focus,
+.todo-edit-form input:focus,
+.edit-start-button:focus,
+.edit-cance-button:focus,
 .delete-button:focus,
 .check-icon:focus,
 .accordion-toggle:focus {
