@@ -9,7 +9,6 @@ import {
 import { TodoType } from '../Types/TodoType';
 import { useState } from 'react';
 import { useTodos } from '../Hooks/useTodos';
-import { Tooltip } from '@mantine/core';
 
 /**
  * props定義
