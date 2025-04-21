@@ -1,11 +1,12 @@
 import { ActionIcon, Menu } from '@mantine/core';
 import { IconFilter } from '@tabler/icons-react';
+import { FilterStatus } from '../Types/TodoType';
 
 /**
  * props定義
  */
 interface FilterMenuProps {
-  onChange: (filter: 'all' | 'active' | 'completed') => void;
+  onChange: (filter: FilterStatus) => void;
 }
 
 /**

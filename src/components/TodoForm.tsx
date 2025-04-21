@@ -1,6 +1,6 @@
 import { FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
-import { TodoType } from '../Types/TodoType';
+import { AddTodoPayload } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
 
 /**
@@ -43,11 +43,9 @@ function TodoForm() {
     }
 
     // 新規タスク追加用のオブジェクト作成
-    const newTodo: TodoType = {
-      id: Date.now(), // タスクID（現在時刻）
+    const newTodo: AddTodoPayload = {
       text: input, // タスク内容（入力された内容）
       dueDate: dueDate || undefined, // タスク期日（任意選択された期日）
-      completed: false, // 完了状態（未完了）
     };
     // タスクを追加する
     dispatch({ type: 'ADD', payload: newTodo });

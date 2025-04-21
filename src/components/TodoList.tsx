@@ -2,6 +2,7 @@ import TodoItem from './TodoItem';
 import { useTodos } from '../Hooks/useTodos';
 import { useMemo, useState } from 'react';
 import FilterMenu from './FilterMenu';
+import { FilterStatus } from '../Types/TodoType';
 
 /**
  * props定義
@@ -17,9 +18,7 @@ function TodoList({ deleteTodo }: TodoListProps) {
   // useTodosからContextを取得
   const { todos, dispatch } = useTodos();
   // フィルターの状態を管理
-  const [filter, setFilter] = useState<'all' | 'active' | 'completed'>(
-    'active',
-  );
+  const [filter, setFilter] = useState<FilterStatus>('active');
 
   /**
    * 完了状態切り替え処理

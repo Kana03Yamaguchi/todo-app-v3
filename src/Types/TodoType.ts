@@ -8,9 +8,26 @@ export interface TodoType {
   completed: boolean; // 完了状態（true: 完了 / false: 未完了）
 }
 
+/**
+ *  型定義：フィルター状態
+ */
+export type FilterStatus = 'all' | 'active' | 'completed';
+
+/**
+ * ADD：追加用プロパティ
+ */
+export type AddTodoPayload = Pick<TodoType, 'text' | 'dueDate'>;
+
+/**
+ * EDIT：編集用プロパティ（idは必須、それ以外は任意）
+ */
+type EditTodoPayload = {
+  id: number;
+} & Partial<Pick<TodoType, 'text' | 'dueDate'>>;
+
 // 型定義：アクション（命令の種類）
 export type Action =
-  | { type: 'ADD'; payload: TodoType } // タスク追加
+  | { type: 'ADD'; payload: AddTodoPayload } // タスク追加
   | { type: 'CHANGE_COMPLETED'; payload: number } // 完了状態切り替え
-  | { type: 'EDIT'; payload: { id: number; text: string; dueDate?: string } } // タスク編集
+  | { type: 'EDIT'; payload: EditTodoPayload } // タスク編集
   | { type: 'DELETE'; payload: number }; // タスク削除
