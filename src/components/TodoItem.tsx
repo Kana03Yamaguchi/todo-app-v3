@@ -9,6 +9,7 @@ import {
 import { TodoType } from '../Types/TodoType';
 import { useState } from 'react';
 import { useTodos } from '../Hooks/useTodos';
+import { Checkbox, ListItem, ListItemText } from '@mui/material';
 
 /**
  * props定義
@@ -109,21 +110,25 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   };
 
   return (
-    <li className="todo-item">
-      <div className="left-section">
+    <ListItem
+      sx={{
+        display: 'flex',
+        justifyContent: 'space-between', // 左右に分ける
+        alignItems: 'center',
+        padding: '14px 20px',
+        borderBottom: '1px solid #ddd',
+      }}
+    >
+      {/* 左側：チェックボックス＋タスク内容 */}
+      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
         {/* チェックボックス表示 */}
-        <span
-          className="check-icon"
+        <Checkbox
+          checked={todo.completed}
           // チェックされたタスクのIDを渡して関数を呼び出す
-          onClick={changeCompleted.bind(null, todo.id)}
-          style={{ cursor: 'pointer' }}
-        >
-          {todo.completed ? (
-            <FaCheckCircle color="#65b7d8" />
-          ) : (
-            <FaRegCircle color="#888" />
-          )}
-        </span>
+          onChange={() => changeCompleted(todo.id)}
+          icon={<FaRegCircle color="#888" />}
+          checkedIcon={<FaCheckCircle color="#65b7d8" />}
+        />
 
         {isEditing ? (
           // 編集ONの場合
@@ -150,9 +155,17 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
           // 編集OFFの場合
           <>
             {/* タスク内容表示 */}
-            <span className={todo.completed ? 'completed' : ''}>
-              {todo.text}
-            </span>
+            <ListItemText
+              primary={todo.text}
+              slotProps={{
+                primary: {
+                  sx: {
+                    textDecoration: todo.completed ? 'line-through' : 'none',
+                    color: todo.completed ? '#888' : '#000',
+                  },
+                },
+              }}
+            />
 
             {/* タスク期日 */}
             {todo.dueDate && (
@@ -162,6 +175,7 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
         )}
       </div>
 
+      {/* 右側：編集・削除ボタン（後でMUI化） */}
       <div className="right-section">
         {isEditing ? (
           <>
@@ -187,7 +201,7 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
           <FaTrash />
         </button>
       </div>
-    </li>
+    </ListItem>
   );
 }
 

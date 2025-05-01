@@ -3,6 +3,7 @@ import { useTodos } from '../Hooks/useTodos';
 import { useMemo, useState } from 'react';
 import FilterMenu from './FilterMenu';
 import { FilterStatus } from '../Types/TodoType';
+import { List } from '@mui/material';
 
 /**
  * props定義
@@ -46,7 +47,7 @@ function TodoList({ deleteTodo }: TodoListProps) {
         <FilterMenu onChange={setFilter} />
       </div>
 
-      <ul>
+      <List>
         {filteredTodos.map((todo) => (
           <TodoItem
             key={todo.id} // 内部用識別子
@@ -55,7 +56,7 @@ function TodoList({ deleteTodo }: TodoListProps) {
             deleteTodo={deleteTodo}
           />
         ))}
-      </ul>
+      </List>
     </div>
   );
 }

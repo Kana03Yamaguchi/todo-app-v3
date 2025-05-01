@@ -2,6 +2,7 @@ import { FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
 import { AddTodoPayload } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
+import { Button, TextField } from '@mui/material';
 
 /**
  * TodoFormコンポーネント：入力欄と追加ボタンを表示
@@ -62,20 +63,71 @@ function TodoForm() {
     <div>
       <div className="todo-form">
         {/* 入力欄表示 */}
-        <input
-          type="text"
+        <TextField
+          label="タスク"
+          variant="outlined"
           value={input}
           onChange={inputChange}
-          placeholder="タスクを入力"
+          fullWidth
+          sx={{
+            '& .MuiOutlinedInput-root': {
+              border: 'none',
+              borderRadius: '12px',
+              backgroundColor: '#fff',
+              boxShadow: '0 0 0 1px transparent',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
+            },
+            '& .MuiInputBase-input': {
+              padding: '10px 12px',
+            },
+          }}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
         />
 
         {/* 期日欄表示 */}
-        <input type="date" value={dueDate} onChange={dueDateChange} />
+        <TextField
+          label="期日"
+          type="date"
+          value={dueDate}
+          onChange={dueDateChange}
+          fullWidth
+          sx={{
+            minWidth: 130,
+            '& .MuiOutlinedInput-root': {
+              border: 'none',
+              borderRadius: '12px',
+              backgroundColor: '#fff',
+              boxShadow: '0 0 0 1px transparent',
+            },
+            '& .MuiOutlinedInput-notchedOutline': {
+              border: 'none',
+            },
+            '& .MuiInputBase-input': {
+              padding: '10px 12px',
+            },
+          }}
+          slotProps={{
+            inputLabel: { shrink: true },
+          }}
+        />
 
         {/* 追加ボタン表示 */}
-        <button onClick={addTodo}>
+        <Button
+          onClick={addTodo}
+          variant="contained"
+          color="primary"
+          sx={{
+            borderRadius: '12px',
+            padding: '12px',
+            minWidth: '48px',
+          }}
+        >
           <FaPlus />
-        </button>
+        </Button>
       </div>
 
       {/* 入力エラーメッセージ表示 */}
