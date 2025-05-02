@@ -9,7 +9,21 @@ import {
 import { TodoType } from '../Types/TodoType';
 import { useState } from 'react';
 import { useTodos } from '../Hooks/useTodos';
-import { Checkbox, ListItem, ListItemText } from '@mui/material';
+import {
+  Checkbox,
+  IconButton,
+  ListItem,
+  ListItemText,
+  TextField,
+} from '@mui/material';
+import {
+  iconButtonCancelStyle,
+  iconButtonDeleteStyle,
+  iconButtonEditStyle,
+  iconButtonSaveStyle,
+  inputFieldBase,
+  listItemContainer,
+} from '../styles/muiStyles';
 
 /**
  * props定義
@@ -110,17 +124,9 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   };
 
   return (
-    <ListItem
-      sx={{
-        display: 'flex',
-        justifyContent: 'space-between', // 左右に分ける
-        alignItems: 'center',
-        padding: '14px 20px',
-        borderBottom: '1px solid #ddd',
-      }}
-    >
+    <ListItem sx={listItemContainer}>
       {/* 左側：チェックボックス＋タスク内容 */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+      <div className="left-section">
         {/* チェックボックス表示 */}
         <Checkbox
           checked={todo.completed}
@@ -134,19 +140,43 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
           // 編集ONの場合
           <div className="todo-edit-form">
             {/* 入力欄表示 */}
-            <input type="text" value={editInput} onChange={editInputChange} />
+            <TextField
+              label="タスク"
+              variant="outlined"
+              value={editInput}
+              onChange={editInputChange}
+              fullWidth
+              sx={{
+                flex: 2,
+                minWidth: 120,
+                ...inputFieldBase,
+              }}
+              slotProps={{
+                inputLabel: { shrink: true },
+              }}
+            />
 
             {/* 期日欄表示 */}
-            <input
+            <TextField
+              label="期日"
               type="date"
               value={editDueDate}
               onChange={editDueDateChange}
+              fullWidth
+              sx={{
+                flex: 1,
+                minWidth: 130,
+                ...inputFieldBase,
+              }}
+              slotProps={{
+                inputLabel: { shrink: true },
+              }}
             />
 
             {/* 保存ボタン表示 */}
-            <button onClick={saveTodo}>
+            <IconButton onClick={saveTodo} sx={iconButtonSaveStyle}>
               <FaSave />
-            </button>
+            </IconButton>
 
             {/* 入力エラーメッセージ表示 */}
             {errorMsg && <p className="error-message">{errorMsg}</p>}
@@ -175,31 +205,31 @@ function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
         )}
       </div>
 
-      {/* 右側：編集・削除ボタン（後でMUI化） */}
+      {/* 右側：編集・削除ボタン */}
       <div className="right-section">
         {isEditing ? (
           <>
             {/* キャンセルボタン表示 */}
-            <button className="edit-cance-button" onClick={cancelEdit}>
+            <IconButton onClick={cancelEdit} sx={iconButtonCancelStyle}>
               <FaUndoAlt />
-            </button>
+            </IconButton>
           </>
         ) : (
           <>
             {/* 編集ボタン表示 */}
-            <button className="edit-start-button" onClick={startEdit}>
+            <IconButton onClick={startEdit} sx={iconButtonEditStyle}>
               <FaEdit />
-            </button>
+            </IconButton>
           </>
         )}
 
         {/* 削除ボタン表示 */}
-        <button
-          className="delete-button"
-          onClick={deleteTodo.bind(null, todo.id)}
+        <IconButton
+          onClick={() => deleteTodo(todo.id)}
+          sx={iconButtonDeleteStyle}
         >
           <FaTrash />
-        </button>
+        </IconButton>
       </div>
     </ListItem>
   );

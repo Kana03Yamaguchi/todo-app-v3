@@ -177,12 +177,12 @@ ul {
 .todo-edit-form {
   display: flex;
   align-items: center;
-  gap: 12px; /* ← ここで左右の感覚を調整！ */
-  flex-wrap: wrap; /* ← モバイル対応で折り返しもOKに */
+  gap: 12px;
+  flex-wrap: wrap;
 }
 
 /* 保存ボタン */
-.todo-edit-form button {
+/* .todo-edit-form button {
   padding: 8px 12px;
   font-size: 16px;
   background: none;
@@ -194,7 +194,7 @@ ul {
 
 .todo-edit-form button:hover {
   color: #4fa4ca;
-}
+} */
 
 /* タスク項目右側（編集ボタン/削除ボタン） */
 .right-section {
@@ -204,7 +204,7 @@ ul {
 }
 
 /* 編集ボタン */
-.edit-start-button {
+/* .edit-start-button {
   padding: 8px 12px;
   font-size: 16px;
   background: none;
@@ -216,10 +216,10 @@ ul {
 
 .edit-start-button:hover {
   color: #04d24f;
-}
+} */
 
 /* キャンセルボタン */
-.edit-cance-button {
+/* .edit-cance-button {
   padding: 8px 12px;
   font-size: 16px;
   background: none;
@@ -231,10 +231,10 @@ ul {
 
 .edit-cance-button:hover {
   color: #ff9324;
-}
+} */
 
 /* 削除ボタン */
-.delete-button {
+/* .delete-button {
   margin-left: 16px;
   padding: 8px 12px;
   font-size: 16px;
@@ -247,7 +247,7 @@ ul {
 
 .delete-button:hover {
   color: #b06e6e;
-}
+} */
 
 /* アコーディオンセクション */
 .accordion-section {

@@ -1,6 +1,11 @@
-import { ActionIcon, Menu } from '@mantine/core';
-import { IconFilter } from '@tabler/icons-react';
+import { useState } from 'react';
+import { IconButton, Menu, MenuItem } from '@mui/material';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
 import { FilterStatus } from '../Types/TodoType';
+import {
+  filterMenuButtonStyle,
+  filterMenuPaperStyle,
+} from '../styles/muiStyles';
 
 /**
  * props定義
@@ -13,89 +18,48 @@ interface FilterMenuProps {
  * FilterMenuコンポーネント：「すべて／未完了／完了済み」のフィルター切り替え
  */
 function FilterMenu({ onChange }: FilterMenuProps) {
-  // 「すべて」を選択時
-  const allClick = () => onChange('all');
-  // 「未完了」を選択時
-  const activeClick = () => onChange('active');
-  // 「完了済」を選択時
-  const completedClick = () => onChange('completed');
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const isOpen = Boolean(anchorEl);
+
+  const handleOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleFilter = (filter: FilterStatus) => {
+    onChange(filter);
+    handleClose();
+  };
 
   return (
-    <Menu
-      shadow="sm"
-      width={180}
-      position="bottom"
-      withArrow
-      withinPortal={false}
-      offset={4}
-      transitionProps={{ transition: 'pop-top-left', duration: 150 }}
-    >
-      {/* メニュー表示 */}
-      <Menu.Target>
-        <ActionIcon
-          variant="transparent"
-          size="lg"
-          aria-label="フィルターメニュー"
-          styles={{
-            root: {
-              backgroundColor: 'transparent',
-              boxShadow: 'none',
-              border: 'none',
-              outline: 'none',
-              '&:focus': {
-                outline: 'none',
-                boxShadow: 'none',
-              },
-            },
-          }}
-        >
-          <IconFilter size={20} color="#444" />
-        </ActionIcon>
-      </Menu.Target>
+    <>
+      <IconButton
+        onClick={handleOpen}
+        aria-label="フィルターメニュー"
+        sx={filterMenuButtonStyle}
+      >
+        <FilterAltIcon sx={{ color: '#444' }} />
+      </IconButton>
 
-      {/* メニューリスト */}
-      <Menu.Dropdown
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'stretch',
-          backgroundColor: '#fff',
-          borderRadius: 8,
-          padding: 0,
-          width: 70,
+      <Menu
+        anchorEl={anchorEl}
+        open={isOpen}
+        onClose={handleClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+        transformOrigin={{ vertical: 'top', horizontal: 'left' }}
+        slotProps={{
+          paper: {
+            sx: filterMenuPaperStyle,
+          },
         }}
       >
-        {[
-          { label: 'すべて', onClick: allClick },
-          { label: '未完了', onClick: activeClick },
-          { label: '完了済', onClick: completedClick },
-        ].map((item, index) => (
-          <Menu.Item
-            key={index}
-            onClick={item.onClick}
-            styles={{
-              item: {
-                backgroundColor: '#fff',
-                color: '#333',
-                fontSize: '14px',
-                padding: '8px 12px',
-                outline: 'none',
-                boxShadow: 'none',
-                '&:hover': {
-                  backgroundColor: '#f2f2f2',
-                },
-                '&:focus': {
-                  outline: 'none',
-                  boxShadow: 'none',
-                },
-              },
-            }}
-          >
-            {item.label}
-          </Menu.Item>
-        ))}{' '}
-      </Menu.Dropdown>
-    </Menu>
+        <MenuItem onClick={() => handleFilter('all')}>すべて</MenuItem>
+        <MenuItem onClick={() => handleFilter('active')}>未完了</MenuItem>
+        <MenuItem onClick={() => handleFilter('completed')}>完了済</MenuItem>
+      </Menu>
+    </>
   );
 }
 

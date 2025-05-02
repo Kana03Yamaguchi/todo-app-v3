@@ -3,6 +3,7 @@ import { useState } from 'react';
 import { AddTodoPayload } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
 import { Button, TextField } from '@mui/material';
+import { inputFieldBase } from '../styles/muiStyles';
 
 /**
  * TodoFormコンポーネント：入力欄と追加ボタンを表示
@@ -69,20 +70,7 @@ function TodoForm() {
           value={input}
           onChange={inputChange}
           fullWidth
-          sx={{
-            '& .MuiOutlinedInput-root': {
-              border: 'none',
-              borderRadius: '12px',
-              backgroundColor: '#fff',
-              boxShadow: '0 0 0 1px transparent',
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              border: 'none',
-            },
-            '& .MuiInputBase-input': {
-              padding: '10px 12px',
-            },
-          }}
+          sx={inputFieldBase}
           slotProps={{
             inputLabel: { shrink: true },
           }}
@@ -95,21 +83,7 @@ function TodoForm() {
           value={dueDate}
           onChange={dueDateChange}
           fullWidth
-          sx={{
-            minWidth: 130,
-            '& .MuiOutlinedInput-root': {
-              border: 'none',
-              borderRadius: '12px',
-              backgroundColor: '#fff',
-              boxShadow: '0 0 0 1px transparent',
-            },
-            '& .MuiOutlinedInput-notchedOutline': {
-              border: 'none',
-            },
-            '& .MuiInputBase-input': {
-              padding: '10px 12px',
-            },
-          }}
+          sx={{ minWidth: 130, ...inputFieldBase }}
           slotProps={{
             inputLabel: { shrink: true },
           }}
