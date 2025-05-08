@@ -75,9 +75,15 @@ function App() {
     if (selectedMenu === 'today') {
       filtered = filterTodayTasks(filtered);
     }
+
     // フィルターが「未完了」の場合は完了していないタスクに絞る
     if (filter === 'active') {
       filtered = filtered.filter((todo) => !todo.completed);
+
+      // newTodoId がある場合は、そのタスクのみ表示
+      if (newTodoId !== null) {
+        filtered = filtered.filter((todo) => todo.id === newTodoId);
+      }
     }
     // フィルターが「完了済み」の場合は完了したタスクに絞る
     else if (filter === 'completed') {
@@ -86,7 +92,7 @@ function App() {
 
     // 最終的な表示対象のタスクを返す
     return filtered;
-  }, [todos, selectedMenu, filter, filterTodayTasks]);
+  }, [todos, selectedMenu, filter, filterTodayTasks, newTodoId]);
 
   /**
    * タスク削除ボタン処理
@@ -152,8 +158,8 @@ function App() {
         <NavMenu
           selectedMenu={selectedMenu}
           onSelect={setSelectedMenu}
-          filter={filter}
           setFilter={setFilter}
+          setNewTodoId={setNewTodoId}
         />
 
         {/* 右カラム：タスク一覧 */}
@@ -185,7 +191,6 @@ function App() {
                 deleteTodo={deleteTodo}
                 tasks={visibleTasks}
                 dispatch={dispatch}
-                newTodoId={newTodoId}
               />
 
               {/* 削除済みタスクエリア */}

@@ -18,16 +18,19 @@ import { useCallback } from 'react';
 interface NavMenuProps {
   selectedMenu: MenuType; // 現在選択されているメニュー
   onSelect: (menu: MenuType) => void; // メニュー選択時の関数
-  filter: FilterStatus; // 現在のフィルター状態
   setFilter: React.Dispatch<React.SetStateAction<FilterStatus>>; // フィルター状態を更新する関数
+  setNewTodoId: React.Dispatch<React.SetStateAction<number | null>>; // 直近追加IDを更新する関数
 }
 
 /**
  * NavMenuコンポーネント：左カラムに表示するナビメニュー
  */
-function NavMenu({ selectedMenu, onSelect, filter, setFilter }: NavMenuProps) {
-  console.log(filter);
-
+function NavMenu({
+  selectedMenu,
+  onSelect,
+  setFilter,
+  setNewTodoId,
+}: NavMenuProps) {
   /**
    * メモ化
    */
@@ -36,24 +39,28 @@ function NavMenu({ selectedMenu, onSelect, filter, setFilter }: NavMenuProps) {
     const nextMenu = selectedMenu === 'today' ? 'all' : 'today';
     onSelect(nextMenu);
     setFilter('all');
-  }, [selectedMenu, onSelect, setFilter]);
+    setNewTodoId(null);
+  }, [selectedMenu, onSelect, setFilter, setNewTodoId]);
 
   // 未完了タスク選択
   const handleActiveClick = useCallback(() => {
     onSelect('active');
     setFilter('active');
-  }, [onSelect, setFilter]);
+    setNewTodoId(null);
+  }, [onSelect, setFilter, setNewTodoId]);
 
   // 完了済タスク選択
   const handleCompletedClick = useCallback(() => {
     onSelect('completed');
     setFilter('completed');
-  }, [onSelect, setFilter]);
+    setNewTodoId(null);
+  }, [onSelect, setFilter, setNewTodoId]);
 
   // 削除済みタスク選択
   const handleDeletedClick = useCallback(() => {
     onSelect('deleted');
-  }, [onSelect]);
+    setNewTodoId(null);
+  }, [onSelect, setNewTodoId]);
   return (
     <List>
       {/* 今日のタスク／全てのタスク切り替えボタン */}

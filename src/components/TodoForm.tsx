@@ -24,7 +24,6 @@ function TodoForm({ setSelectedMenu, setFilter, setNewTodoId }: TodoFormProps) {
   const [dueDate, setDueDate] = useState('');
   // エラーメッセージ表示を管理
   const [errorMsg, setErrorMsg] = useState('');
-
   // useTodosからContextを取得
   const { dispatch } = useTodos();
 
