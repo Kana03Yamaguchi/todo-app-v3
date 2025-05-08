@@ -1,8 +1,7 @@
 import TodoItem from './TodoItem';
-import { useTodos } from '../Hooks/useTodos';
-import { useMemo, useState } from 'react';
+import { useMemo } from 'react';
 import FilterMenu from './FilterMenu';
-import { FilterStatus } from '../Types/TodoType';
+import { Action, FilterStatus, TodoType } from '../Types/TodoType';
 import { List } from '@mui/material';
 
 /**
@@ -10,17 +9,22 @@ import { List } from '@mui/material';
  */
 interface TodoListProps {
   deleteTodo: (id: number) => void; // 削除ボタン押下時用関数
+  tasks: TodoType[]; // 親コンポーネントから渡されたタスクのリスト
+  dispatch: React.Dispatch<Action>; // 親コンポーネントから渡された状態更新のための関数
+  filter: FilterStatus; // 現在のフィルター状態
+  setFilter: React.Dispatch<React.SetStateAction<FilterStatus>>; // フィルター状態を更新する関数
 }
 
 /**
  * TodoListコンポーネント：タスク一覧表示
  */
-function TodoList({ deleteTodo }: TodoListProps) {
-  // useTodosからContextを取得
-  const { todos, dispatch } = useTodos();
-  // フィルターの状態を管理
-  const [filter, setFilter] = useState<FilterStatus>('active');
-
+function TodoList({
+  deleteTodo,
+  tasks,
+  dispatch,
+  filter,
+  setFilter,
+}: TodoListProps) {
   /**
    * 完了状態切り替え処理
    */
@@ -32,13 +36,13 @@ function TodoList({ deleteTodo }: TodoListProps) {
   const filteredTodos = useMemo(() => {
     switch (filter) {
       case 'active':
-        return todos.filter((todo) => !todo.completed);
+        return tasks.filter((todo) => !todo.completed);
       case 'completed':
-        return todos.filter((todo) => todo.completed);
+        return tasks.filter((todo) => todo.completed);
       default:
-        return todos;
+        return tasks;
     }
-  }, [todos, filter]);
+  }, [tasks, filter]);
 
   return (
     <div>

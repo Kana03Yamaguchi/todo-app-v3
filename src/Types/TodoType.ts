@@ -9,6 +9,11 @@ export interface TodoType {
 }
 
 /**
+ *  型定義：ナビメニュー状態
+ */
+export type MenuType = 'today' | 'all' | 'active' | 'completed' | 'deleted';
+
+/**
  *  型定義：フィルター状態
  */
 export type FilterStatus = 'all' | 'active' | 'completed';

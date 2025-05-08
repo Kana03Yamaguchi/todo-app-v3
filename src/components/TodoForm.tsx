@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { AddTodoPayload } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
 import { Button, TextField } from '@mui/material';
-import { inputFieldBase } from '../styles/muiStyles';
+import { commonButtonStyle, inputFieldBase } from '../styles/muiStyles';
 
 /**
  * TodoFormコンポーネント：入力欄と追加ボタンを表示
@@ -94,11 +94,7 @@ function TodoForm() {
           onClick={addTodo}
           variant="contained"
           color="primary"
-          sx={{
-            borderRadius: '12px',
-            padding: '12px',
-            minWidth: '48px',
-          }}
+          sx={commonButtonStyle}
         >
           <FaPlus />
         </Button>

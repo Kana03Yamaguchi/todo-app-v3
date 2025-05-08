@@ -250,7 +250,7 @@ ul {
 } */
 
 /* アコーディオンセクション */
-.accordion-section {
+/* .accordion-section {
   margin-top: 24px;
 }
 
@@ -267,7 +267,7 @@ ul {
 
 .accordion-toggle:hover {
   background-color: #515456;
-}
+} */
 
 .deleted-todo-list {
   background-color: #8e8b8b;
@@ -287,7 +287,7 @@ ul {
 }
 
 /* フォーカス時の枠線削除 */
-.todo-form input:focus,
+/* .todo-form input:focus,
 .todo-form button:focus,
 .todo-edit-form input:focus,
 .edit-start-button:focus,
@@ -297,4 +297,4 @@ ul {
 .accordion-toggle:focus {
   outline: none;
   box-shadow: none;
-}
+} */

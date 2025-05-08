@@ -1,3 +1,14 @@
+// 共通：フォーカス＆ホバー時の枠線を削除
+export const focusAndHoverClearStyle = {
+  '&:focus': {
+    outline: 'none',
+    boxShadow: 'none',
+  },
+  '&:hover': {
+    boxShadow: 'none',
+  },
+};
+
 // 入力フィールドの共通スタイル
 export const inputFieldBase = {
   // 入力欄全体の角丸と背景色の指定
@@ -5,8 +16,14 @@ export const inputFieldBase = {
     borderRadius: '12px',
     backgroundColor: '#fff',
     boxShadow: 'none',
+    // フォーカス時の枠線（アウトライン）を削除
+    '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+      border: 'none',
+    },
+    // フォーカス時の影（青い枠）を削除
+    ...focusAndHoverClearStyle,
   },
-  // デフォルトの枠線を非表示にする
+  // デフォルトのアウトライン（囲い線）を削除
   '& .MuiOutlinedInput-notchedOutline': {
     border: 'none',
   },
@@ -30,7 +47,36 @@ export const listItemContainer = {
   borderBottom: '1px solid #ddd',
 };
 
-// ボタン全体に共通のスタイル
+// ボタン共通のスタイル
+export const commonButtonStyle = {
+  borderRadius: '12px',
+  padding: '12px',
+  minWidth: '48px',
+  // フォーカス時の枠線を削除
+  ...focusAndHoverClearStyle,
+};
+
+// フィルターボタンのスタイル
+export const filterMenuButtonStyle = {
+  ...commonButtonStyle,
+  backgroundColor: 'transparent',
+  '&:hover': {
+    backgroundColor: 'transparent',
+  },
+};
+
+// 削除済みトグルボタンのスタイル
+export const deletedToggleButtonStyle = {
+  ...commonButtonStyle,
+  backgroundColor: 'transparent',
+  color: '#333',
+  marginTop: '24px',
+  '&:hover': {
+    backgroundColor: 'transparent',
+  },
+};
+
+// リスト内ボタン全体に共通のスタイル
 export const iconButtonBase = {
   padding: '8px 12px',
   fontSize: '16px',
@@ -39,6 +85,8 @@ export const iconButtonBase = {
   color: '#333',
   cursor: 'pointer',
   transition: 'color 0.3s ease',
+  // フォーカス時の枠線を削除
+  ...focusAndHoverClearStyle,
 };
 
 // 編集ボタンのスタイル
@@ -75,17 +123,6 @@ export const iconButtonCancelStyle = {
   '&:hover': {
     // ホバー時にオレンジ
     color: '#ff9324',
-  },
-};
-
-// フィルターボタンのスタイル
-export const filterMenuButtonStyle = {
-  backgroundColor: 'transparent',
-  border: 'none',
-  outline: 'none',
-  boxShadow: 'none',
-  '&:hover': {
-    backgroundColor: 'transparent',
   },
 };
 
