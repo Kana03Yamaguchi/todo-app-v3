@@ -35,7 +35,7 @@ interface TodoItemProps {
 }
 
 /**
- * TodoItemコンポーネント：タスク項目を表示（完了状態、タスク内容 、 削除ボタン）
+ * TodoItemコンポーネント：タスク項目を表示（完了状態、タスク内容 、削除ボタン）
  */
 function TodoItem({ todo, changeCompleted, deleteTodo }: TodoItemProps) {
   // 編集状態を管理（false:編集OFF/true:編集ON）

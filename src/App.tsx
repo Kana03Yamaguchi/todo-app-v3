@@ -1,61 +1,92 @@
-import { useEffect, useReducer, useState } from 'react';
+import { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
 import './App.css';
 import TodoForm from './components/TodoForm';
 import TodoList from './components/TodoList';
 import { FilterStatus, MenuType, TodoType } from './Types/TodoType';
-import { FaChevronUp, FaChevronDown, FaTrash } from 'react-icons/fa';
 import { todoReducer } from './Reducers/todoReducer';
 import { TodoContext } from './Contexts/TodoContext';
-import { deletedToggleButtonStyle } from './styles/muiStyles';
-import { Box, Button } from '@mui/material';
+import {
+  Box,
+  createTheme,
+  IconButton,
+  ThemeProvider,
+  Typography,
+} from '@mui/material';
 import NavMenu from './components/NavMenu';
+import FilterMenu from './components/FilterMenu';
+import DarkModeIcon from '@mui/icons-material/DarkMode';
+import LightModeIcon from '@mui/icons-material/LightMode';
 
 function App() {
   // タスクの一覧を管理
   const [todos, dispatch] = useReducer(todoReducer, []);
+  // 現在のテーマモードを管理（light or dark）
+  const [mode, setMode] = useState<'light' | 'dark'>('light');
+  // ライトテーマの定義
+  const lightTheme = createTheme({
+    palette: {
+      mode: 'light',
+    },
+  });
+
+  // ダークテーマの定義
+  const darkTheme = createTheme({
+    palette: {
+      mode: 'dark',
+    },
+  });
+  // ナビメニューの選択状態を管理
+  const [selectedMenu, setSelectedMenu] = useState<MenuType>('today');
+  // フィルターの状態を管理（未完了・完了・すべて）
+  const [filter, setFilter] = useState<FilterStatus>('active');
+  // 直近で追加されたタスクのIDを管理
+  const [newTodoId, setNewTodoId] = useState<number | null>(null);
   // 削除済みタスクを管理
   const [deletedTodos, setDeletedTodos] = useState<TodoType[]>([]);
   // 未完了のタスク数
   const remaining = todos.filter((todo) => !todo.completed).length;
-  // アコーディオン開閉を管理
-  const [isAccordionOpen, setIsAccordionOpen] = useState(false);
-  // ナビメニューの選択状態を管理
-  const [selectedMenu, setSelectedMenu] = useState<MenuType>('today');
-  // フィルターの状態を管理
-  const [filter, setFilter] = useState<FilterStatus>('active');
 
   /**
-   * ナビメニューの選択に応じて表示するタスクを切り替える処理
-   * @returns {TodoType[]} 表示するタスクの配列
+   * テーマモード切り替え処理
    */
-  const getVisibleTasks = (): TodoType[] => {
-    switch (selectedMenu) {
-      case 'today':
-        // 今日の日付のタスクだけ返す
-        return filterTodayTasks();
-      case 'active':
-        // 未完了のタスクだけ返す
-        return todos.filter((todo) => !todo.completed);
-      case 'completed':
-        // 完了済みのタスクだけ返す
-        return todos.filter((todo) => todo.completed);
-      case 'all':
-      default:
-        // 全てのタスクを返す
-        return todos;
-    }
+  const toggleThemeMode = () => {
+    setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   /**
-   * 今日のタスクをフィルタリングする処理
+   * 今日のタスクだけを取得する関数
    * @returns {TodoType[]} 今日のタスクの配列
    */
-  const filterTodayTasks = () => {
+  const filterTodayTasks = useCallback((list: TodoType[]) => {
     // 今日の日付を取得（yyyy-mm-dd形式）
     const today = new Date().toISOString().split('T')[0];
     // タスク期日が今日の日付に一致するタスクをフィルタリング
-    return todos.filter((todo) => todo.dueDate?.split('T')[0] === today);
-  };
+    return list.filter((todo) => todo.dueDate?.split('T')[0] === today);
+  }, []);
+
+  /**
+   * 選択されたメニューとフィルター状態に基づいて表示するタスクを計算
+   */
+  const visibleTasks = useMemo(() => {
+    // すべてのタスクを一旦コピー
+    let filtered = [...todos];
+
+    // 「今日のタスク」メニューが選ばれている場合は今日のタスクに絞る
+    if (selectedMenu === 'today') {
+      filtered = filterTodayTasks(filtered);
+    }
+    // フィルターが「未完了」の場合は完了していないタスクに絞る
+    if (filter === 'active') {
+      filtered = filtered.filter((todo) => !todo.completed);
+    }
+    // フィルターが「完了済み」の場合は完了したタスクに絞る
+    else if (filter === 'completed') {
+      filtered = filtered.filter((todo) => todo.completed);
+    }
+
+    // 最終的な表示対象のタスクを返す
+    return filtered;
+  }, [todos, selectedMenu, filter, filterTodayTasks]);
 
   /**
    * タスク削除ボタン処理
@@ -104,67 +135,70 @@ function App() {
   }, []);
 
   return (
-    <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
-      {/* 左カラム：ナビメニュー */}
-      <NavMenu
-        selectedMenu={selectedMenu}
-        onSelect={setSelectedMenu}
-        isAccordionOpen={isAccordionOpen}
-        setIsAccordionOpen={setIsAccordionOpen}
-        filter={filter}
-        setFilter={setFilter}
-      />
-      {/* <Box
-        flex={{ xs: 1, md: 4 }}
-        sx={{ backgroundColor: '#f0f0f0', padding: 2, borderRadius: 2 }}
-      > */}
-      {/* タスク期日が「今日」に該当するタスクを表示するボタン */}
-      {/* <Button onClick={() => setShowTodayTasks(!showTodayTasks)}>
-          {showTodayTasks ? '全てのタスク' : '今日のタスク'}
-        </Button> */}
-
-      {/* 削除済みタスクを表示するボタン */}
-      {/* <Button
-          onClick={() => setIsAccordionOpen(!isAccordionOpen)}
-          sx={deletedToggleButtonStyle}
-          variant="contained"
-        >
-          {isAccordionOpen ? <FaChevronUp /> : <FaChevronDown />} <FaTrash />
-        </Button>
-      </Box> */}
-
-      {/* 右カラム：タスク一覧 */}
-      <Box flex={{ xs: 1, md: 8 }} sx={{ padding: 2, overflow: 'auto' }}>
-        <TodoContext.Provider value={{ todos, dispatch }}>
-          <div className="container">
-            <h1>TODO</h1>
-            {/* タスク追加エリア */}
-            <TodoForm />
-
-            {/* タスク件数エリア */}
-            <div className="task-info">
-              <span>アクティブタスク： {remaining} 件</span>
-            </div>
-
-            {/* タスク一覧エリア */}
-            <TodoList
-              deleteTodo={deleteTodo}
-              tasks={getVisibleTasks()}
-              dispatch={dispatch}
-              filter={filter}
-              setFilter={setFilter}
-            />
-
-            {/* 削除済みタスクエリア */}
-            <div>
-              {isAccordionOpen && (
-                <ul className="deleted-todo-list">{deletedTodosList()}</ul>
-              )}
-            </div>
-          </div>
-        </TodoContext.Provider>
+    <ThemeProvider theme={mode === 'light' ? lightTheme : darkTheme}>
+      {/* 上部：右上のテーマ切り替え */}
+      <Box display="flex" justifyContent="flex-end" alignItems="center" p={2}>
+        <IconButton onClick={toggleThemeMode}>
+          {mode === 'light' ? <DarkModeIcon /> : <LightModeIcon />}
+        </IconButton>
+        <Typography variant="body2" ml={1}>
+          {mode === 'light' ? 'Dark Mode' : 'Light Mode'}
+        </Typography>
       </Box>
-    </Box>
+
+      {/* メインレイアウト（左カラム＋右カラム） */}
+      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
+        {/* 左カラム：ナビメニュー */}
+        <NavMenu
+          selectedMenu={selectedMenu}
+          onSelect={setSelectedMenu}
+          filter={filter}
+          setFilter={setFilter}
+        />
+
+        {/* 右カラム：タスク一覧 */}
+        <Box flex={{ xs: 1, md: 8 }} sx={{ padding: 2, overflow: 'auto' }}>
+          <TodoContext.Provider value={{ todos, dispatch }}>
+            <div className="container">
+              <h1>TODO</h1>
+              {/* タスク追加エリア */}
+              <TodoForm
+                setSelectedMenu={setSelectedMenu}
+                setFilter={setFilter}
+                setNewTodoId={setNewTodoId}
+              />
+
+              {/* タスク件数エリア */}
+              <div className="task-info">
+                <span>アクティブタスク： {remaining} 件</span>
+              </div>
+
+              {/* フィルターメニュー表示 */}
+              {(selectedMenu === 'today' || selectedMenu === 'all') && (
+                <div style={{ marginBottom: '16px' }}>
+                  <FilterMenu onChange={setFilter} />
+                </div>
+              )}
+
+              {/* タスク一覧エリア */}
+              <TodoList
+                deleteTodo={deleteTodo}
+                tasks={visibleTasks}
+                dispatch={dispatch}
+                newTodoId={newTodoId}
+              />
+
+              {/* 削除済みタスクエリア */}
+              <div>
+                {selectedMenu === 'deleted' && (
+                  <ul className="deleted-todo-list">{deletedTodosList()}</ul>
+                )}
+              </div>
+            </div>
+          </TodoContext.Provider>
+        </Box>
+      </Box>
+    </ThemeProvider>
   );
 }
 

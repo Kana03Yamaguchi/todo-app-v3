@@ -21,7 +21,9 @@ export type FilterStatus = 'all' | 'active' | 'completed';
 /**
  * ADD：追加用プロパティ
  */
-export type AddTodoPayload = Pick<TodoType, 'text' | 'dueDate'>;
+export type AddTodoPayload = {
+  id?: number;
+} & Pick<TodoType, 'text' | 'dueDate'>;
 
 /**
  * EDIT：編集用プロパティ（idは必須、それ以外は任意）

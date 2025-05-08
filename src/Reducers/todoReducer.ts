@@ -6,7 +6,8 @@ export function todoReducer(state: TodoType[], action: Action): TodoType[] {
     case 'ADD': {
       // 新しいIDを発番（最大ID + 1）
       const newId =
-        state.length > 0 ? Math.max(...state.map((t) => t.id)) + 1 : 1;
+        action.payload.id ??
+        (state.length > 0 ? Math.max(...state.map((t) => t.id)) + 1 : 1);
 
       // タスクを追加
       return [

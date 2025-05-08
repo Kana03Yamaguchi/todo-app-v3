@@ -1,14 +1,23 @@
 import { FaPlus } from 'react-icons/fa';
 import { useState } from 'react';
-import { AddTodoPayload } from '../Types/TodoType';
+import { AddTodoPayload, FilterStatus, MenuType } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
 import { Button, TextField } from '@mui/material';
 import { commonButtonStyle, inputFieldBase } from '../styles/muiStyles';
 
 /**
+ * props定義
+ */
+interface TodoFormProps {
+  setSelectedMenu: React.Dispatch<React.SetStateAction<MenuType>>; // ナビメニューの表示状態を更新する関数
+  setFilter: React.Dispatch<React.SetStateAction<FilterStatus>>; // フィルター（未完了/完了）の状態を更新する関数
+  setNewTodoId: React.Dispatch<React.SetStateAction<number | null>>; // 直近追加IDを更新する関数
+}
+
+/**
  * TodoFormコンポーネント：入力欄と追加ボタンを表示
  */
-function TodoForm() {
+function TodoForm({ setSelectedMenu, setFilter, setNewTodoId }: TodoFormProps) {
   // 入力欄の内容を管理
   const [input, setInput] = useState('');
   // 期日を管理
@@ -44,11 +53,18 @@ function TodoForm() {
       return;
     }
 
+    // 一時的なユニークタスクID生成
+    const newId = Date.now();
+
     // 新規タスク追加用のオブジェクト作成
     const newTodo: AddTodoPayload = {
+      id: newId, // ユニークタスクID
       text: input, // タスク内容（入力された内容）
       dueDate: dueDate || undefined, // タスク期日（任意選択された期日）
     };
+
+    // 直近追加したタスクIDを記録
+    setNewTodoId(newId);
     // タスクを追加する
     dispatch({ type: 'ADD', payload: newTodo });
 
@@ -58,6 +74,9 @@ function TodoForm() {
     setDueDate('');
     // エラーメッセージを空にリセット
     setErrorMsg('');
+    // 未完了タスクを表示
+    setSelectedMenu('active');
+    setFilter('active');
   };
 
   return (
