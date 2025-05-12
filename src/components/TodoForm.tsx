@@ -4,6 +4,7 @@ import { AddTodoPayload, FilterStatus, MenuType } from '../Types/TodoType';
 import { useTodos } from '../Hooks/useTodos';
 import { Button, TextField } from '@mui/material';
 import { commonButtonStyle, inputFieldBase } from '../styles/muiStyles';
+import Tooltip from '@mui/material/Tooltip';
 
 /**
  * props定義
@@ -88,7 +89,7 @@ function TodoForm({ setSelectedMenu, setFilter, setNewTodoId }: TodoFormProps) {
           value={input}
           onChange={inputChange}
           fullWidth
-          sx={inputFieldBase}
+          sx={{ minWidth: 130, ...inputFieldBase }}
           slotProps={{
             inputLabel: { shrink: true },
           }}
@@ -108,14 +109,16 @@ function TodoForm({ setSelectedMenu, setFilter, setNewTodoId }: TodoFormProps) {
         />
 
         {/* 追加ボタン表示 */}
-        <Button
-          onClick={addTodo}
-          variant="contained"
-          color="primary"
-          sx={commonButtonStyle}
-        >
-          <FaPlus />
-        </Button>
+        <Tooltip title="追加" arrow>
+          <Button
+            onClick={addTodo}
+            variant="contained"
+            color="primary"
+            sx={commonButtonStyle}
+          >
+            <FaPlus />
+          </Button>
+        </Tooltip>
       </div>
 
       {/* 入力エラーメッセージ表示 */}

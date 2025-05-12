@@ -54,6 +54,9 @@ export function todoReducer(state: TodoType[], action: Action): TodoType[] {
         // タスクを削除（IDが一致しないものだけ残す）
         return todo.id !== action.payload;
       });
+
+    case 'REORDER_TASKS':
+      return action.payload;
     default:
       return state;
   }

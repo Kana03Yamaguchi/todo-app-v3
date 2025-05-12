@@ -37,4 +37,5 @@ export type Action =
   | { type: 'ADD'; payload: AddTodoPayload } // タスク追加
   | { type: 'CHANGE_COMPLETED'; payload: number } // 完了状態切り替え
   | { type: 'EDIT'; payload: EditTodoPayload } // タスク編集
-  | { type: 'DELETE'; payload: number }; // タスク削除
+  | { type: 'DELETE'; payload: number } // タスク削除
+  | { type: 'REORDER_TASKS'; payload: TodoType[] }; // タスク並び替え

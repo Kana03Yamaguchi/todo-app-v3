@@ -8,6 +8,7 @@ import { TodoContext } from './Contexts/TodoContext';
 import {
   Box,
   createTheme,
+  Grid,
   IconButton,
   ThemeProvider,
   Typography,
@@ -153,19 +154,30 @@ function App() {
       </Box>
 
       {/* メインレイアウト（左カラム＋右カラム） */}
-      <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} gap={2}>
+      <Box
+        sx={{
+          display: 'flex',
+          height: '100%',
+          minHeight: '80vh',
+          width: '100%',
+          margin: 0,
+          paddingBottom: 0,
+        }}
+      >
         {/* 左カラム：ナビメニュー */}
-        <NavMenu
-          selectedMenu={selectedMenu}
-          onSelect={setSelectedMenu}
-          setFilter={setFilter}
-          setNewTodoId={setNewTodoId}
-        />
+        <Grid container direction="column" sx={{ flex: 1 }}>
+          <NavMenu
+            selectedMenu={selectedMenu}
+            onSelect={setSelectedMenu}
+            setFilter={setFilter}
+            setNewTodoId={setNewTodoId}
+          />
+        </Grid>
 
         {/* 右カラム：タスク一覧 */}
-        <Box flex={{ xs: 1, md: 8 }} sx={{ padding: 2, overflow: 'auto' }}>
+        <Grid container direction="column" sx={{ flex: 3.2, paddingBottom: 0 }}>
           <TodoContext.Provider value={{ todos, dispatch }}>
-            <div className="container">
+            <div className="container" style={{ width: '100%' }}>
               <h1>TODO</h1>
               {/* タスク追加エリア */}
               <TodoForm
@@ -201,7 +213,7 @@ function App() {
               </div>
             </div>
           </TodoContext.Provider>
-        </Box>
+        </Grid>
       </Box>
     </ThemeProvider>
   );

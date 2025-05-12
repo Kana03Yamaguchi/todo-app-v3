@@ -1,4 +1,5 @@
 import {
+  Box,
   List,
   ListItemButton,
   ListItemIcon,
@@ -11,6 +12,11 @@ import RadioButtonUncheckedIcon from '@mui/icons-material/RadioButtonUnchecked';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { FilterStatus, MenuType } from '../Types/TodoType';
 import { useCallback } from 'react';
+import {
+  navMenuContainer,
+  navMenuItemStyle,
+  navMenuSelectedStyle,
+} from '../styles/muiStyles';
 
 /**
  * propsの型定義
@@ -61,51 +67,72 @@ function NavMenu({
     onSelect('deleted');
     setNewTodoId(null);
   }, [onSelect, setNewTodoId]);
+
   return (
-    <List>
-      {/* 今日のタスク／全てのタスク切り替えボタン */}
-      <ListItemButton
-        selected={selectedMenu === 'today' || selectedMenu === 'all'}
-        onClick={handleToggleToday}
-      >
-        <ListItemIcon>
-          {selectedMenu === 'today' ? <ChecklistIcon /> : <TodayIcon />}
-        </ListItemIcon>
-        <ListItemText
-          primary={selectedMenu === 'today' ? '全てのタスク' : '今日のタスク'}
-        />
-      </ListItemButton>
-      {/* 未完了タスクのフィルターボタン */}
-      <ListItemButton
-        selected={selectedMenu === 'active'}
-        onClick={handleActiveClick}
-      >
-        <ListItemIcon>
-          <RadioButtonUncheckedIcon />
-        </ListItemIcon>
-        <ListItemText primary="未完了タスク" />
-      </ListItemButton>
-      {/* 完了済タスクのフィルターボタン */}
-      <ListItemButton
-        selected={selectedMenu === 'completed'}
-        onClick={handleCompletedClick}
-      >
-        <ListItemIcon>
-          <CheckCircleIcon />
-        </ListItemIcon>
-        <ListItemText primary="完了済タスク" />
-      </ListItemButton>
-      {/* 削除済タスクのフィルターボタン */}
-      <ListItemButton
-        selected={selectedMenu === 'deleted'}
-        onClick={handleDeletedClick}
-      >
-        <ListItemIcon>
-          <DeleteIcon />
-        </ListItemIcon>
-        <ListItemText primary="削除済タスク" />
-      </ListItemButton>{' '}
-    </List>
+    <Box sx={navMenuContainer}>
+      <List>
+        {/* 今日のタスク／全てのタスク切り替えボタン */}
+        <ListItemButton
+          selected={selectedMenu === 'today' || selectedMenu === 'all'}
+          onClick={handleToggleToday}
+          sx={{
+            ...navMenuItemStyle,
+            ...(selectedMenu === 'today' || selectedMenu === 'all'
+              ? navMenuSelectedStyle
+              : {}),
+          }}
+        >
+          <ListItemIcon>
+            {selectedMenu === 'today' ? <ChecklistIcon /> : <TodayIcon />}
+          </ListItemIcon>
+          <ListItemText
+            primary={selectedMenu === 'today' ? '全てのタスク' : '今日のタスク'}
+          />
+        </ListItemButton>
+        {/* 未完了タスクのフィルターボタン */}
+        <ListItemButton
+          selected={selectedMenu === 'active'}
+          onClick={handleActiveClick}
+          sx={{
+            ...navMenuItemStyle,
+            ...(selectedMenu === 'active' ? navMenuSelectedStyle : {}),
+          }}
+        >
+          <ListItemIcon>
+            <RadioButtonUncheckedIcon />
+          </ListItemIcon>
+          <ListItemText primary="未完了タスク" />
+        </ListItemButton>
+        {/* 完了済タスクのフィルターボタン */}
+        <ListItemButton
+          selected={selectedMenu === 'completed'}
+          onClick={handleCompletedClick}
+          sx={{
+            ...navMenuItemStyle,
+            ...(selectedMenu === 'completed' ? navMenuSelectedStyle : {}),
+          }}
+        >
+          <ListItemIcon>
+            <CheckCircleIcon />
+          </ListItemIcon>
+          <ListItemText primary="完了済タスク" />
+        </ListItemButton>
+        {/* 削除済タスクのフィルターボタン */}
+        <ListItemButton
+          selected={selectedMenu === 'deleted'}
+          onClick={handleDeletedClick}
+          sx={{
+            ...navMenuItemStyle,
+            ...(selectedMenu === 'deleted' ? navMenuSelectedStyle : {}),
+          }}
+        >
+          <ListItemIcon>
+            <DeleteIcon />
+          </ListItemIcon>
+          <ListItemText primary="削除済タスク" />
+        </ListItemButton>{' '}
+      </List>
+    </Box>
   );
 }
 

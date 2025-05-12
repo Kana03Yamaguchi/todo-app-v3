@@ -38,10 +38,10 @@ body {
 .container {
   width: 100%;
   max-width: 800px;
-  margin: 40px auto;
-  padding: 48px;
+  height: 100%;
+  margin: 0px;
+  padding: 140px;
   border: 2px solid #ddd;
-  border-radius: 8px;
   background-color: #ccc;
 }
 
